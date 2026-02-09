@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Puchuuu 💖</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #fff0f5;
+      text-align: center;
+      margin-top: 100px;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 { font-size: 40px; }
+
+    #timer {
+      font-size: 28px;
+      margin: 20px;
+      color: #ff1493;
+      font-weight: bold;
+    }
+
+    #yes {
+      background: hotpink;
+      color: white;
+      font-size: 30px;
+      padding: 20px 50px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    #yes:hover { transform: scale(1.1); }
+
+    #no {
+      background: #ddd;
+      font-size: 16px;
+      padding: 10px 25px;
+      border-radius: 10px;
+      border: none;
+      position: absolute;
+      left: 55%;
+      top: 55%;
+      cursor: pointer;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-120vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<img src="cat.jpg" width="120">
+
+<h1 id="question">Puchuuu, will you be my valentine? 💕</h1>
+<div id="timer"></div>
+
+<button id="yes">YES</button>
+<button id="no">No</button>
+
+<audio id="violin">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-sad-violin-494.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const yesBtn = document.getElementById("yes");
+  const noBtn = document.getElementById("no");
+  const question = document.getElementById("question");
+  const timer = document.getElementById("timer");
+  const violin = document.getElementById("violin");
+
+  let stage = 0;
+  let countdown;
+
+  ["mouseover","touchstart"].forEach(evt => {
+    noBtn.addEventListener(evt, () => {
+      violin.currentTime = 0;
+      violin.play();
+      const x = Math.random() * (window.innerWidth - 120);
+      const y = Math.random() * (window.innerHeight - 120);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    });
+  });
+
+  yesBtn.addEventListener("click", () => {
+    if (stage === 0) {
+      stage = 1;
+      question.innerText = "Are you REALLY sure? 😏";
+      startCountdown();
+    } else if (stage === 1) {
+      yesBtn.innerText = "NO 😈";
+      yesBtn.style.background = "#aaa";
+      setTimeout(() => {
+        yesBtn.innerText = "YES 😇";
+        yesBtn.style.background = "hotpink";
+      }, 700);
+    } else if (stage === 2) {
+      winScreen();
+    }
+  });
+
+  function startCountdown() {
+    let time = 3;
+    timer.innerText = `⏳ ${time}`;
+    countdown = setInterval(() => {
+      time--;
+      timer.innerText = time > 0 ? `⏳ ${time}` : "SAY YES 💖";
+      if (time === 0) {
+        clearInterval(countdown);
+        stage = 2;
+      }
+    }, 1000);
+  }
+
+  function winScreen() {
+    document.body.innerHTML = `
+      <h1>YAYYYYY!!! 💖 Mission Passed!</h1>
+      <p style="font-size:24px;">
+        Puchuuu clicked YES under pressure 😌
+      </p>
+      <p style="font-size:20px;">
+        Terms & Conditions: 50% chocolates required 🍫
+      </p>
+      <p style="font-size:18px;">
+        P.S. The NO button has been emotionally defeated 🎻
+      </p>
+    `;
+  }
+
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "💖";
+    h.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+  }, 400);
+</script>
+
+</body>
+</html>
